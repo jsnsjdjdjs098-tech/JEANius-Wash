@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JEANius Wash - Lavandería</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            text-align: center;
+            padding: 50px;
+        }
+        .logo {
+            font-size: 2.5em;
+            color: #1e90ff;
+            font-weight: bold;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, textarea {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background: #1e90ff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">JEANius Wash</div>
+    <p>Lavandería especializada en jeans</p>
+
+    <form id="orderForm">
+        <h2>Hacer pedido</h2>
+        <input type="text" id="name" placeholder="Nombre" required>
+        <input type="tel" id="phone" placeholder="Teléfono" required>
+        <textarea id="items" placeholder="Descripción del pedido" rows="3"></textarea>
+        <input type="number" id="price" placeholder="Precio (Bs)" step="0.01">
+        <button type="submit">Enviar pedido</button>
+    </form>
+
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const data = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                items: document.getElementById('items').value,
+                price: document.getElementById('price').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/orders', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('✅ Pedido enviado correctamente');
+                    document.getElementById('orderForm').reset();
+                } else {
+                    alert('❌ Error al enviar el pedido');
+                }
+            } catch (error) {
+                alert('⚠️ Asegúrate de que tu servidor Flask esté ejecutándose');
+            }
+        });
+    </script>
+</body>
+</html>
